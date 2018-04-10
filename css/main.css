@@ -1,3 +1,63 @@
-window {
-    
+.pane-group {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
 }
+
+.pane {
+  position: relative;
+  overflow-y: auto;
+  border-left: 1px solid #ddd;
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;  
+  flex: 1;
+}
+.pane:first-child {
+  border-left: 0;
+}
+.pane-header {
+    size: 12pt;
+    background-color: darkgrey;
+    color: white;
+    text-align: center;
+    padding: 3px;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-variant: small-caps;
+}  
+.pane-section {
+    border-bottom: 1px solid #ddd;
+    padding: 2px;
+}
+.pane-section:first {
+    border-top: 1px solid #ddd;
+}
+.pane-section:last-of-type {
+    flex-grow: 1;
+}
+
+input[type="file"] {
+    color:white;
+}
+.window {
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   display: flex;
+   font-family: sans-serif;
+   flex-direction: column;
+   background-color: rgb(30,30,30);
+ }
+ 
+ .window-content {
+   position: relative;
+   overflow-y: auto;
+   display: flex;
+   flex: 1;
+ }
