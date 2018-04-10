@@ -1,0 +1,14 @@
+{
+  "name": "excelmerger",
+  "version": "1.0.0",
+  "description": "This application merges csv files based on specified parameters.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Joshua Cummings",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.8.4"
+  }
+}
