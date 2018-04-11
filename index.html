@@ -5,108 +5,133 @@
 	<title>CSVMerger</title>
 
 	<!-- Stylesheets -->
-	<link rel="stylesheet" href="./css/main.css"/>
-	<link rel="stylesheet" href="./node_modules/dragula/dist/dragula.css"
-</head>
+	<link rel="stylesheet" href="./css/main.css" />
+	<link rel="stylesheet" href="./node_modules/dragula/dist/dragula.css" </head>
 
-<body>
+	<body>
 		<script src="./node_modules/dragula/dist/dragula.js"></script>
-		
+		<script>window.$ = window.jQuery = require('jquery');</script>
+
 		<script>
-			const {ipcRenderer} = require('electron');
+			const { ipcRenderer } = require('electron');
 
 			ipcRenderer.on('CreateSortable', (event) => {
 				dragula([document.querySelector('#mergedcolumnlist')])
 			});
-			
-			window.onload=function() {
-				document.querySelector('#file1').addEventListener('change', fileChanged)
-				document.querySelector('#file2').addEventListener('change', fileChanged)
+
+			window.onload = function () {
+				$(".fileBrowseBtn").click(function (event) {
+					var app = require('electron').remote;
+					var fs = require('fs'); // Load the File System to execute our common tasks (CRUD)
+					var dialog = app.dialog;
+
+					dialog.showOpenDialog(function (fileNames) {
+						if (fileNames === undefined) {
+							console.log("No file selected");
+						} else {
+							$(event.target).next('.filePathLabel').html(fileNames[0]);
+
+							fs.readFile(fileNames[0], 'utf-8', function (err, data) {
+								if (err) {
+									alert("An error ocurred reading the file :" + err.message);
+									return;
+								}
+								var lines = data.split(/[\r\n]+/);
+								var headers = lines[0].split(',');
+
+								var columnlist = $(event.target).closest('.pane').find('.columnlist');
+
+								headers.forEach(element => {
+									addColumn(columnlist, element)
+								});
+							});
+						}
+
+						// If all files have a values
+						if ($('.filePathLabel').toArray().every(hasValue)) {
+							MakeMergedColumns();
+						}
+
+					});
+
+				});
 			}
 
-			function fileChanged() {
-				var filevals = this.value.split('.');
-				var ext = filevals[filevals.length -1 ];
-				
-				if (ext != "csv"){
-					this.value = "";
-					alert("File must be a .csv!")
-				}
-				else {
-					
-				}
+			function hasValue(val) {
+				return (val.textContent.trim() != "");
 			}
+			function addColumn(list, column) {
+				var col = `<div class="columnlist-item">
+									<input type="checkbox" />` + column + `</div>`
+				$(list).append(col);
+			}
+			function MakeMergedColumns() {
+				alert($(".columnlist-item").length)
+				$(".columnlist-item").each(function () {
+					$("#mergedcolumnlist").append($(this).clone());
+				});
+			}
+
+
 		</script>
 
-	<div class="window">
-		<div class="header">
+		<div class="window">
+			<div class="header">
 
-		</div>
+			</div>
 
-		<div class="window-content">
-			<div class="pane-group">
-				<div class="pane">
-					<div class="pane-header">File 1</div>
-					<div class="pane-section">
-						<input id="file1" type="file" />
-					</div>
-
-					<div class="pane-section">
-						<div id="columnlist1" class="columnlist">
-							<div class="columnlist-item"><input type="checkbox"/>One</div>	
-							<div class="columnlist-item"><input type="checkbox"/>Two</div>	
-							<div class="columnlist-item"><input type="checkbox"/>Three</div>	
+			<div class="window-content">
+				<div class="pane-group">
+					<div class="pane">
+						<div class="pane-header">File 1</div>
+						<div class="pane-section">
+							<input class="fileBrowseBtn" type="button" value="Browse..." />
+							<label class="filePathLabel" />
 						</div>
 
-
-					</div>
-				</div>
-
-				<div class="pane">
-					<div class="pane-header">File 2</div>
-					<div class="pane-section">
-						<input id="file2" type="file" />
-					</div>
-
-					<div class="pane-section">
-						<div id="columnlist2" class="columnlist">
-							<div class="columnlist-item"><input type="checkbox"/>One</div>	
-							<div class="columnlist-item"><input type="checkbox"/>Four</div>	
-							<div class="columnlist-item"><input type="checkbox"/>Five</div>	
+						<div class="pane-section">
+							<div id="columnlist1" class="columnlist">
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="pane">
-					<div class="pane-header">Merged</div>
-					<div class="pane-section">
-						<input id="mergefile" type="file" />
+					<div class="pane">
+						<div class="pane-header">File 2</div>
+						<div class="pane-section">
+							<input class="fileBrowseBtn" type="button" value="Browse..." />
+							<label class="filePathLabel" />
+						</div>
+
+						<div class="pane-section">
+							<div id="columnlist2" class="columnlist">
+							</div>
+						</div>
 					</div>
-					<div class="pane-section">
-						<div id="mergedcolumnlist" class="columnlist">
-							<div class="columnlist-item">One</div>	
-							<div class="columnlist-item">Two</div>	
-							<div class="columnlist-item">Three</div>
-							<div class="columnlist-item">Four</div>	
-							<div class="columnlist-item">Five</div>	
+
+					<div class="pane">
+						<div class="pane-header">Merged</div>
+						<div class="pane-section">
+							<div id="mergedcolumnlist" class="mergedcolumnlist">
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="footer">
-			<div><h1>Options</h1></div>
-			<div class="options-pane-group">
-				<div class="options-pane">
-					<input type="checkbox"/>Remove Duplicates
+			<div class="footer">
+				<div>
+					<h1>Options</h1>
 				</div>
-				<div class="options-pane">
-					<input type="button" value="Merge"/>
+				<div class="options-pane-group">
+					<div class="options-pane">
+						<input type="checkbox" />Remove Duplicates
+					</div>
+					<div class="options-pane">
+						<input type="button" value="Merge" />
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
+	</body>
 
 </html>

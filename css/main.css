@@ -126,3 +126,6 @@ input[type="button"]{
     bottom: 0;
     margin: 10px;
 }
+.filePathLabel {
+    font-size: 1.45vw;
+}
