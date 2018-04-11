@@ -2,6 +2,7 @@ const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const url = require('url')
 
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -29,12 +30,7 @@ function createWindow() {
     win = null
   })
 
-  win.once('ready-to-show', () => {
-    console.log("Window Show Event");
-    const dragula = require("dragula");
-    
-    win.show();
-  })
+  win.once('ready-to-show', WindowReady)
 
 }
 
@@ -63,3 +59,8 @@ app.on('activate', () => {
   // In this file you can include the rest of your app's specific main process
   // code. You can also put them in separate files and require them here.
   
+function WindowReady(){
+  win.webContents.send('CreateSortable');
+  win.show();
+
+}

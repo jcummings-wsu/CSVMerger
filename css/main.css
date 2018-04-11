@@ -1,3 +1,8 @@
+* {
+    font-family: sans-serif;
+    color: white;
+}
+
 .pane-group {
   position: absolute;
   top: 0;
@@ -10,7 +15,7 @@
 .pane {
   position: relative;
   overflow-y: auto;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid #808080;
   flex-wrap: wrap;
   display: flex;
   flex-direction: column;  
@@ -19,9 +24,16 @@
 .pane:first-child {
   border-left: 0;
 }
+h1 {
+    font-size: 12pt;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-variant: small-caps;
+}
 .pane-header {
-    size: 12pt;
-    background-color: darkgrey;
+    font-size: 12pt;
+    background-color: #404040;
     color: white;
     text-align: center;
     padding: 3px;
@@ -30,11 +42,11 @@
     font-variant: small-caps;
 }  
 .pane-section {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #808080;
     padding: 2px;
 }
 .pane-section:first {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #808080;
 }
 .pane-section:last-of-type {
     flex-grow: 1;
@@ -42,6 +54,11 @@
 
 input[type="file"] {
     color:white;
+}
+input[type="button"]{
+    width:80px;
+    height:30px;
+    color:black;
 }
 .window {
    position: absolute;
@@ -52,7 +69,7 @@ input[type="file"] {
    display: flex;
    font-family: sans-serif;
    flex-direction: column;
-   background-color: rgb(30,30,30);
+   background-color: #202020;
  }
  
  .window-content {
@@ -61,3 +78,51 @@ input[type="file"] {
    display: flex;
    flex: 1;
  }
+
+.columnlist-item {
+     background-color: #707070;
+     border: 1px solid #808080;
+     padding: 2px;
+     margin: 3px;
+     text-align: center;
+     font-weight: 600;
+ }
+ #mergedcolumnlist > .columnlist-item{
+    cursor: move;
+ }
+ #mergedcolumnlist > .columnlist-item:hover {
+    background-color: #808080;
+ }
+ .columnlist-item > input[type="checkbox"] {
+    margin-left: 10px;
+    position: absolute;
+    left: 0;
+    border-radius: 5px;
+    border: 2px solid black;
+    width: 15px;
+    height: 15px;
+    margin-top: 2px;
+ }
+.footer {
+    background-color: #404040;
+}
+.footer * {
+    margin:2px;
+}
+
+.options-pane-group {
+    display:grid;
+    grid-template-columns: 66.6% 33.3%;
+}
+.options-pane {
+    height: 55px;
+}
+.options-pane:last-of-type {
+    text-align: right;
+}
+.options-pane:last-of-type * {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 10px;
+}

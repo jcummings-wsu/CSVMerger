@@ -5,10 +5,39 @@
 	<title>CSVMerger</title>
 
 	<!-- Stylesheets -->
-	<link rel="stylesheet" href="./css/main.css">
+	<link rel="stylesheet" href="./css/main.css"/>
+	<link rel="stylesheet" href="./node_modules/dragula/dist/dragula.css"
 </head>
 
 <body>
+		<script src="./node_modules/dragula/dist/dragula.js"></script>
+		
+		<script>
+			const {ipcRenderer} = require('electron');
+
+			ipcRenderer.on('CreateSortable', (event) => {
+				dragula([document.querySelector('#mergedcolumnlist')])
+			});
+			
+			window.onload=function() {
+				document.querySelector('#file1').addEventListener('change', fileChanged)
+				document.querySelector('#file2').addEventListener('change', fileChanged)
+			}
+
+			function fileChanged() {
+				var filevals = this.value.split('.');
+				var ext = filevals[filevals.length -1 ];
+				
+				if (ext != "csv"){
+					this.value = "";
+					alert("File must be a .csv!")
+				}
+				else {
+					
+				}
+			}
+		</script>
+
 	<div class="window">
 		<div class="header">
 
@@ -23,10 +52,10 @@
 					</div>
 
 					<div class="pane-section">
-						<div class="columnlist">
-							<div class="columnlist-item">One</div>	
-							<div class="columnlist-item">Two</div>	
-							<div class="columnlist-item">Three</div>	
+						<div id="columnlist1" class="columnlist">
+							<div class="columnlist-item"><input type="checkbox"/>One</div>	
+							<div class="columnlist-item"><input type="checkbox"/>Two</div>	
+							<div class="columnlist-item"><input type="checkbox"/>Three</div>	
 						</div>
 
 
@@ -36,23 +65,46 @@
 				<div class="pane">
 					<div class="pane-header">File 2</div>
 					<div class="pane-section">
-						<input id="file1" type="file" />
+						<input id="file2" type="file" />
 					</div>
 
 					<div class="pane-section">
-
+						<div id="columnlist2" class="columnlist">
+							<div class="columnlist-item"><input type="checkbox"/>One</div>	
+							<div class="columnlist-item"><input type="checkbox"/>Four</div>	
+							<div class="columnlist-item"><input type="checkbox"/>Five</div>	
+						</div>
 					</div>
 				</div>
 
 				<div class="pane">
 					<div class="pane-header">Merged</div>
-
+					<div class="pane-section">
+						<input id="mergefile" type="file" />
+					</div>
+					<div class="pane-section">
+						<div id="mergedcolumnlist" class="columnlist">
+							<div class="columnlist-item">One</div>	
+							<div class="columnlist-item">Two</div>	
+							<div class="columnlist-item">Three</div>
+							<div class="columnlist-item">Four</div>	
+							<div class="columnlist-item">Five</div>	
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="footer">
-
+			<div><h1>Options</h1></div>
+			<div class="options-pane-group">
+				<div class="options-pane">
+					<input type="checkbox"/>Remove Duplicates
+				</div>
+				<div class="options-pane">
+					<input type="button" value="Merge"/>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
