@@ -69,6 +69,10 @@
 				return (val.textContent.trim() != "");
 			}
 			function addColumn(list, column) {
+				if (column.trim() == "")
+				{
+					return;
+				}
 				if ($(list).children().length != 0) {
 					var col = `<div class="columnlist-item">
 									<input type="checkbox" />` + column + `</div>`
@@ -103,6 +107,7 @@
 
 			function MergeFiles() {
 				fs = require('fs')
+				var iconvlite = require('iconv-lite');
 				var app = require('electron').remote;
 				var dialog = app.dialog;
 
@@ -112,7 +117,7 @@
 					var html = $(col).html().trim();
 					columns.push(html)
 				});
-				debugger
+				
 				//check each file has path to read from
 				for (var i = 0; i < $(".filePathLabel").length; i++) {
 					if ($(".filePathLabel")[i].textContent.trim() == "") {
@@ -125,7 +130,8 @@
 				var fileData = []
 				$.each($(".filePathLabel"), function (index, label) {
 
-					var contents = fs.readFileSync($(label).html().trim(), 'utf-8', );
+					var contents = fs.readFileSync($(label).html().trim());
+					contents = iconvlite.decode(contents, 'utf8');
 
 					//Build table using all files
 					var lines = contents.split(/[\r\n]+/);
@@ -189,6 +195,7 @@
 				for (var i = 0; i < primaryKeys.length; i++) // for each key
 				{
 					var curLine = "";
+					debugger
 					for (var h = 0; h < columns.length; h++) //for each column
 					{
 						if (curLine.length == 0) {
@@ -226,6 +233,7 @@
 
 			}
 			function FindData(fileData, column, pKeyIndexArray, pKeyVal) {
+				var val = "";
 				for (var i = 0; i < fileData.length; i++) //file in filedata
 				{
 					for (var h = 0; h < fileData[i][0].length; h++) //Look for appropriate column in the header
@@ -233,8 +241,12 @@
 						if (column == fileData[i][0][h]) //if h is the correct column, go look through the whole file for a pKeyVal match
 						{
 							for (var k = 0; k < fileData[i].length; k++) {
+								debugger
 								if (fileData[i][k][pKeyIndexArray[i]] == pKeyVal) {
-									return String(fileData[i][k][h]);
+									if (String(fileData[i][k][h]) != "")
+									{
+										return String(fileData[i][k][h]);
+									}
 								}
 							}
 						}
