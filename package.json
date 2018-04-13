@@ -1,5 +1,5 @@
 {
-  "name": "excelmerger",
+  "name": "CSVMerger",
   "version": "1.0.0",
   "description": "This application merges csv files based on specified parameters.",
   "main": "main.js",
